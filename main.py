@@ -135,3 +135,74 @@ def read_note(title: str) -> str:
 
     with open(path, "r", encoding="utf-8") as f:
         return f.read()
+    
+
+
+#this tool will be able to summarize the given note
+@mcp.tool()
+def summarize_note(title: str) -> str:
+    """
+    Generates a simple summary of a note by returning the first few sentences.
+    """
+
+    path = os.path.join("notes", f"{title}.txt")
+
+    if not os.path.exists(path):
+        return "Note not found."
+
+    with open(path, "r", encoding="utf-8") as f:
+        text = f.read().strip()
+
+    if not text:
+        return "The note is empty."
+
+    sentences = text.replace("\n", " ").split(".")
+
+    summary = ". ".join(sentences[:3]).strip()
+
+    if summary and not summary.endswith("."):
+        summary += "."
+
+    return f"Summary:\n\n{summary}"
+
+
+
+#this tool will be able to make quiz from the notes that we have already generated
+@mcp.tool()
+def generate_quiz(title: str) -> list:
+    """
+    Generates simple quiz questions from each sentence in a note.
+    """
+
+    path = os.path.join("notes", f"{title}.txt")
+
+    if not os.path.exists(path):
+        return ["Note not found."]
+
+    with open(path, "r", encoding="utf-8") as f:
+        text = f.read()
+
+    sentences = [
+        s.strip()
+        for s in text.split(".")
+        if len(s.strip()) > 20
+    ]
+
+    quiz = []
+
+    for i, sentence in enumerate(sentences[:5], start=1):
+
+        words = sentence.split()
+
+        if len(words) > 5:
+            answer = words[0]
+            question = sentence.replace(answer, "______", 1)
+
+            quiz.append(
+                {
+                    "question": question + "?",
+                    "answer": answer
+                }
+            )
+
+    return quiz
