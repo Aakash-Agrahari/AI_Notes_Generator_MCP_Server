@@ -102,3 +102,36 @@ def delete_note(title: str) ->str:
 
     return "Note deleted successfully."
 
+
+#this tool will be able to list all the notes
+@mcp.tool()
+def list_notes() -> list:
+    """
+    Lists all available notes.
+    """
+    os.makedirs("notes", exist_ok=True)
+
+    notes = [
+        file[:-4]
+        for file in os.listdir("notes")
+        if file.endswith(".txt")
+    ]
+
+    return notes
+
+
+
+#this tool will tell if the given note exists or not
+@mcp.tool()
+def read_note(title: str) -> str:
+    """
+    Reads a note.
+    """
+
+    path = os.path.join("notes", f"{title}.txt")
+
+    if not os.path.exists(path):
+        return "Note not found."
+
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read()
