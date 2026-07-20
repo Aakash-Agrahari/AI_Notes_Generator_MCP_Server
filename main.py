@@ -25,8 +25,6 @@ def description() -> str:
     """Provides a description of the server."""
     return "This is an example MCP server."
 
-if __name__ == "__main__":
-    mcp.run()
 
 
 #here we are intitializing a tool to seatch notes in the notes folder
@@ -206,3 +204,8 @@ def generate_quiz(title: str) -> list:
             )
 
     return quiz
+
+
+
+if __name__ == "__main__":
+    mcp.run()
